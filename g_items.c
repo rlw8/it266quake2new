@@ -17,6 +17,10 @@ void Weapon_GrenadeLauncher (edict_t *ent);
 void Weapon_Railgun (edict_t *ent);
 void Weapon_BFG (edict_t *ent);
 
+//::Pridkett
+void Weapon_Sword(edict_t *ent);
+//!Pridkett
+
 gitem_armor_t jacketarmor_info	= { 25,  50, .30, .00, ARMOR_JACKET};
 gitem_armor_t combatarmor_info	= { 50, 100, .60, .30, ARMOR_COMBAT};
 gitem_armor_t bodyarmor_info	= {100, 200, .80, .60, ARMOR_BODY};
@@ -137,7 +141,7 @@ void SetRespawn (edict_t *ent, float delay)
 
 //======================================================================
 
-qboolean Pickup_Powerup (edict_t *ent, edict_t *other)
+qboolean Pickup_Powerup (edict_t *ent, edict_t *other) //COME HERE POWERUP
 {
 	int		quantity;
 
@@ -212,6 +216,8 @@ qboolean Pickup_Bandolier (edict_t *ent, edict_t *other)
 		other->client->pers.max_cells = 250;
 	if (other->client->pers.max_slugs < 75)
 		other->client->pers.max_slugs = 75;
+	if (other->client->pers.max_gibs < 300) //COME HERE BORK MRORE
+		other->client->pers.max_gibs = 300;
 
 	item = FindItem("Bullets");
 	if (item)
@@ -229,6 +235,15 @@ qboolean Pickup_Bandolier (edict_t *ent, edict_t *other)
 		other->client->pers.inventory[index] += item->quantity;
 		if (other->client->pers.inventory[index] > other->client->pers.max_shells)
 			other->client->pers.inventory[index] = other->client->pers.max_shells;
+	}
+
+	item = FindItem("Gibs");
+	if (item)
+	{
+		index = ITEM_INDEX(item); //MORE BROEK SHIT COME HERE
+		other->client->pers.inventory[index] += item->quantity;
+		if (other->client->pers.inventory[index] > other->client->pers.max_gibs)
+			other->client->pers.inventory[index] = other->client->pers.max_gibs;
 	}
 
 	if (!(ent->spawnflags & DROPPED_ITEM) && (deathmatch->value))
@@ -254,6 +269,8 @@ qboolean Pickup_Pack (edict_t *ent, edict_t *other)
 		other->client->pers.max_cells = 300;
 	if (other->client->pers.max_slugs < 100)
 		other->client->pers.max_slugs = 100;
+	if (other->client->pers.max_gibs < 500) //COME HERE HEL:P
+		other->client->pers.max_gibs = 500;
 
 	item = FindItem("Bullets");
 	if (item)
@@ -307,6 +324,15 @@ qboolean Pickup_Pack (edict_t *ent, edict_t *other)
 		other->client->pers.inventory[index] += item->quantity;
 		if (other->client->pers.inventory[index] > other->client->pers.max_slugs)
 			other->client->pers.inventory[index] = other->client->pers.max_slugs;
+	}
+	//COME HERE IM HELPS ME
+	item = FindItem("Gibs");
+	if (item)
+	{
+		index = ITEM_INDEX(item);
+		other->client->pers.inventory[index] += item->quantity;
+		if (other->client->pers.inventory[index] > other->client->pers.max_gibs)
+			other->client->pers.inventory[index] = other->client->pers.max_gibs;
 	}
 
 	if (!(ent->spawnflags & DROPPED_ITEM) && (deathmatch->value))
@@ -445,6 +471,8 @@ qboolean Add_Ammo (edict_t *ent, gitem_t *item, int count)
 		max = ent->client->pers.max_cells;
 	else if (item->tag == AMMO_SLUGS)
 		max = ent->client->pers.max_slugs;
+	else if (item->tag == AMMO_GIBS) //COME HERE
+		max = ent->client->pers.max_gibs;
 	else
 		return false;
 
@@ -1304,8 +1332,8 @@ always owned, never in the world
 /* icon */		"w_shotgun",
 /* pickup */	"Shotgun",
 		0,
-		1,
-		"Shells",
+		4,
+		"Gibs",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_SHOTGUN,
 		NULL,
@@ -1327,8 +1355,8 @@ always owned, never in the world
 /* icon */		"w_sshotgun",
 /* pickup */	"Super Shotgun",
 		0,
-		2,
-		"Shells",
+		12,
+		"Gibs",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_SUPERSHOTGUN,
 		NULL,
@@ -1351,7 +1379,7 @@ always owned, never in the world
 /* pickup */	"Machinegun",
 		0,
 		1,
-		"Bullets",
+		"Gibs", //COME HERE BROKE SHIT
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_MACHINEGUN,
 		NULL,
@@ -1373,8 +1401,8 @@ always owned, never in the world
 /* icon */		"w_chaingun",
 /* pickup */	"Chaingun",
 		0,
-		1,
-		"Bullets",
+		3,
+		"Gibs",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_CHAINGUN,
 		NULL,
@@ -1419,8 +1447,8 @@ always owned, never in the world
 /* icon */		"w_glauncher",
 /* pickup */	"Grenade Launcher",
 		0,
-		1,
-		"Grenades",
+		18,
+		"Gibs",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_GRENADELAUNCHER,
 		NULL,
@@ -1442,8 +1470,8 @@ always owned, never in the world
 /* icon */		"w_rlauncher",
 /* pickup */	"Rocket Launcher",
 		0,
-		1,
-		"Rockets",
+		22,
+		"Gibs",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_ROCKETLAUNCHER,
 		NULL,
@@ -1465,8 +1493,8 @@ always owned, never in the world
 /* icon */		"w_hyperblaster",
 /* pickup */	"HyperBlaster",
 		0,
-		1,
-		"Cells",
+		5,
+		"Gibs",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_HYPERBLASTER,
 		NULL,
@@ -1488,8 +1516,8 @@ always owned, never in the world
 /* icon */		"w_railgun",
 /* pickup */	"Railgun",
 		0,
-		1,
-		"Slugs",
+		28,
+		"Gibs",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_RAILGUN,
 		NULL,
@@ -1511,14 +1539,42 @@ always owned, never in the world
 /* icon */		"w_bfg",
 /* pickup */	"BFG10K",
 		0,
-		50,
-		"Cells",
+		68,
+		"Gibs",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_BFG,
 		NULL,
 		0,
 /* precache */ "sprites/s_bfg1.sp2 sprites/s_bfg2.sp2 sprites/s_bfg3.sp2 weapons/bfg__f1y.wav weapons/bfg__l1a.wav weapons/bfg__x1b.wav weapons/bfg_hum.wav"
 	},
+
+			//::Pridkett
+			/* weapon_sword
+			always owned, never in the world
+			*/
+	{
+		"weapon_sword",
+		NULL,
+		Use_Weapon,                             //How to use
+		NULL,
+		Weapon_Sword,                           //What the function is
+		"misc/w_pkup.wav",
+		NULL,
+		0,
+		"models/weapons/v_blast/tris.md2",      //The models stuff
+		"w_blaster",                                    //Icon to be used
+		"Sword",                                        //Pickup name
+		0,
+		0,
+		NULL,
+		IT_WEAPON,
+		NULL,
+		0,
+		"weapons/blastf1a.wav misc/lasfly.wav" //The sound of the blaster
+											   //This is precached
+	},
+
+			//!Pridkett
 
 	//
 	// AMMO ITEMS
@@ -1569,6 +1625,31 @@ always owned, never in the world
 		AMMO_BULLETS,
 /* precache */ ""
 	},
+
+
+	//YOU BROKE SOME SHIT BOY COME HERE
+	{
+		"ammo_gibs",
+		Pickup_Ammo,
+		NULL,
+		Drop_Ammo,
+		NULL,
+		"misc/am_pkup.wav",
+		"models/objects/gibs/sm_meat/tris.md2", 0, //models/items/ammo/bullets/medium/tris.md2
+		NULL,
+		/* icon */		"a_gibs",
+		/* pickup */	"Gibs",
+		/* width */		3,
+		5,
+		NULL,
+		IT_AMMO,
+		0,
+		NULL,
+		AMMO_GIBS,
+		""
+	},
+
+
 
 /*QUAKED ammo_cells (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
@@ -1665,6 +1746,32 @@ always owned, never in the world
 		0,
 /* precache */ "items/damage.wav items/damage2.wav items/damage3.wav"
 	},
+			
+		//COME HERE YOU BROKE SHIT
+
+		//QUAKED item_quad (.3 .3 1) (-16 -16 -16) (16 16 16)
+		
+	//{
+		//"item_tri",
+		//Pickup_Powerup,
+		//Use_Quad,
+		//Drop_General,
+		//NULL,
+		//"items/pkup.wav",
+		//"models/items/quaddama/tris.md2", EF_ROTATE,
+		//NULL,
+		///* icon */		"p_quad",
+		///* pickup */	"Tri Damage",
+		///* width */		2,
+		//60,
+		//NULL,
+		//IT_POWERUP,
+		//0,
+		//NULL,
+		//0,
+		///* precache */ "items/damage.wav items/damage2.wav items/damage3.wav"
+	//},
+	
 
 /*QUAKED item_invulnerability (.3 .3 1) (-16 -16 -16) (16 16 16)
 */

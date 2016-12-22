@@ -75,6 +75,7 @@ void gib_think (edict_t *self)
 	self->s.frame++;
 	self->nextthink = level.time + FRAMETIME;
 
+
 	if (self->s.frame == 10)
 	{
 		self->think = G_FreeEdict;
@@ -91,6 +92,7 @@ void gib_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf
 
 	self->touch = NULL;
 
+
 	if (plane)
 	{
 		gi.sound (self, CHAN_VOICE, gi.soundindex ("misc/fhit3.wav"), 1, ATTN_NORM, 0);
@@ -106,14 +108,47 @@ void gib_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf
 			self->nextthink = level.time + FRAMETIME;
 		}
 	}
+
+	/*
+	if (other->client)
+	{
+		Add_Ammo(other, "Gibs", 20);
+		gib_die(self, NULL, NULL, NULL, NULL);
+	}
+	*/
 }
+
 
 void gib_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
 {
 	G_FreeEdict (self);
 }
 
-void ThrowGib (edict_t *self, char *gibname, int damage, int type)
+
+
+
+/*
+//FUCKED A WHOLE BUNCH OF SHIT UP BREH COME HERE
+void gib_pickup(edict_t *self, edict_t *other)
+{
+	gib_touch(self, other, NULL, NULL);
+	if (!other->client)
+		return;
+	else {
+		pickup
+	}
+
+
+	gib_die(self, NULL, NULL, NULL, NULL);
+}
+*/
+
+
+
+
+
+
+void ThrowGib (edict_t *self, char *gibname, int damage, int type)  //COME HERE
 {
 	edict_t *gib;
 	vec3_t	vd;
@@ -159,6 +194,8 @@ void ThrowGib (edict_t *self, char *gibname, int damage, int type)
 	gib->nextthink = level.time + 10 + random()*10;
 
 	gi.linkentity (gib);
+
+	SpawnItem(gib, FindItem("Gibs"));
 }
 
 void ThrowHead (edict_t *self, char *gibname, int damage, int type)

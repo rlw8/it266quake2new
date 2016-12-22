@@ -479,7 +479,7 @@ void LookAtKiller (edict_t *self, edict_t *inflictor, edict_t *attacker)
 player_die
 ==================
 */
-void player_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void player_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point) //USEFUL CODE vec3_t point is where they died
 {
 	int		n;
 
@@ -591,14 +591,46 @@ void InitClientPersistant (gclient_t *client)
 
 	memset (&client->pers, 0, sizeof(client->pers));
 
-	item = FindItem("Blaster");
+	item = FindItem("Sword");
+	client->pers.inventory[ITEM_INDEX(item)] = 1;
+
+	item = FindItem("Machinegun");
+	client->pers.inventory[ITEM_INDEX(item)] = 1;
+
+	item = FindItem("HyperBlaster");
+	client->pers.inventory[ITEM_INDEX(item)] = 1;
+
+	item = FindItem("Shotgun");
+	client->pers.inventory[ITEM_INDEX(item)] = 1;
+
+	item = FindItem("Super Shotgun");
+	client->pers.inventory[ITEM_INDEX(item)] = 1;
+
+	item = FindItem("Chaingun");
+	client->pers.inventory[ITEM_INDEX(item)] = 1;
+
+	item = FindItem("Grenade Launcher");
+	client->pers.inventory[ITEM_INDEX(item)] = 1;
+
+	item = FindItem("Rocket Launcher");
+	client->pers.inventory[ITEM_INDEX(item)] = 1;
+
+	item = FindItem("Railgun");
+	client->pers.inventory[ITEM_INDEX(item)] = 1;
+
+	item = FindItem("BFG10K");
+	client->pers.inventory[ITEM_INDEX(item)] = 1;
+
+	/*
+	item = FindItem("Blaster"); //Starting weapons USEFUL CODE
 	client->pers.selected_item = ITEM_INDEX(item);
 	client->pers.inventory[client->pers.selected_item] = 1;
+	*/
 
 	client->pers.weapon = item;
 
-	client->pers.health			= 100;
-	client->pers.max_health		= 100;
+	client->pers.health			= 200;
+	client->pers.max_health		= 200;
 
 	client->pers.max_bullets	= 200;
 	client->pers.max_shells		= 100;
@@ -606,6 +638,7 @@ void InitClientPersistant (gclient_t *client)
 	client->pers.max_grenades	= 50;
 	client->pers.max_cells		= 200;
 	client->pers.max_slugs		= 50;
+	client->pers.max_gibs		= 500; //COME HERE HELP PELEASE
 
 	client->pers.connected = true;
 }

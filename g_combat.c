@@ -393,9 +393,9 @@ void T_Damage (edict_t *targ, edict_t *inflictor, edict_t *attacker, vec3_t dir,
 	client = targ->client;
 
 	if (dflags & DAMAGE_BULLET)
-		te_sparks = TE_BULLET_SPARKS;
+		te_sparks = TE_BLOOD;
 	else
-		te_sparks = TE_SPARKS;
+		te_sparks = TE_BLOOD;
 
 	VectorNormalize(dir);
 

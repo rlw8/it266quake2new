@@ -167,9 +167,9 @@ static void fire_lead (edict_t *self, vec3_t start, vec3_t aimdir, int damage, i
 				else if (tr.contents & CONTENTS_LAVA)
 					color = SPLASH_LAVA;
 				else
-					color = SPLASH_UNKNOWN;
+					color = SPLASH_BLOOD;
 
-				if (color != SPLASH_UNKNOWN)
+				if (color != SPLASH_BLOOD)
 				{
 					gi.WriteByte (svc_temp_entity);
 					gi.WriteByte (TE_SPLASH);
@@ -257,7 +257,7 @@ pistols, rifles, etc....
 */
 void fire_bullet (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick, int hspread, int vspread, int mod)
 {
-	fire_lead (self, start, aimdir, damage, kick, TE_GUNSHOT, hspread, vspread, mod);
+	fire_lead (self, start, aimdir, damage, kick, TE_BLOOD, hspread, vspread, mod);
 }
 
 
@@ -273,7 +273,7 @@ void fire_shotgun (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int k
 	int		i;
 
 	for (i = 0; i < count; i++)
-		fire_lead (self, start, aimdir, damage, kick, TE_SHOTGUN, hspread, vspread, mod);
+		fire_lead (self, start, aimdir, damage, kick, TE_BLOOD, hspread, vspread, mod);
 }
 
 
@@ -311,7 +311,7 @@ void blaster_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *
 	else
 	{
 		gi.WriteByte (svc_temp_entity);
-		gi.WriteByte (TE_BLASTER);
+		gi.WriteByte (TE_BLOOD);
 		gi.WritePosition (self->s.origin);
 		if (!plane)
 			gi.WriteDir (vec3_origin);
@@ -347,11 +347,11 @@ void fire_blaster (edict_t *self, vec3_t start, vec3_t dir, int damage, int spee
 	bolt->s.effects |= effect;
 	VectorClear (bolt->mins);
 	VectorClear (bolt->maxs);
-	bolt->s.modelindex = gi.modelindex ("models/objects/laser/tris.md2");
+	bolt->s.modelindex = gi.modelindex ("models/objects/gibs/sm_meat/tris.md2");
 	bolt->s.sound = gi.soundindex ("misc/lasfly.wav");
 	bolt->owner = self;
 	bolt->touch = blaster_touch;
-	bolt->nextthink = level.time + 2;
+	bolt->nextthink = level.time + 10;
 	bolt->think = G_FreeEdict;
 	bolt->dmg = damage;
 	bolt->classname = "bolt";
@@ -430,6 +430,8 @@ static void Grenade_Explode (edict_t *ent)
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
 
+	//ThrowGib(ent, gibname, damage, type);
+
 	G_FreeEdict (ent);
 }
 
@@ -482,10 +484,10 @@ void fire_grenade (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int s
 	grenade->movetype = MOVETYPE_BOUNCE;
 	grenade->clipmask = MASK_SHOT;
 	grenade->solid = SOLID_BBOX;
-	grenade->s.effects |= EF_GRENADE;
+	grenade->s.effects |= EF_GIB; //EF_GRENADE
 	VectorClear (grenade->mins);
 	VectorClear (grenade->maxs);
-	grenade->s.modelindex = gi.modelindex ("models/objects/grenade/tris.md2");
+	grenade->s.modelindex = gi.modelindex ("models/objects/gibs/skull/tris.md2"); //  models/objects/grenade/tris.md2
 	grenade->owner = self;
 	grenade->touch = Grenade_Touch;
 	grenade->nextthink = level.time + timer;
@@ -610,10 +612,10 @@ void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed
 	rocket->movetype = MOVETYPE_FLYMISSILE;
 	rocket->clipmask = MASK_SHOT;
 	rocket->solid = SOLID_BBOX;
-	rocket->s.effects |= EF_ROCKET;
+	rocket->s.effects |= EF_GIB; //EF_ROCKET
 	VectorClear (rocket->mins);
 	VectorClear (rocket->maxs);
-	rocket->s.modelindex = gi.modelindex ("models/objects/rocket/tris.md2");
+	rocket->s.modelindex = gi.modelindex ("models/objects/gibs/skull/tris.md2"); //models/objects/rocket/tris.md2
 	rocket->owner = self;
 	rocket->touch = rocket_touch;
 	rocket->nextthink = level.time + 8000/speed;

@@ -84,7 +84,8 @@ typedef enum
 	AMMO_ROCKETS,
 	AMMO_GRENADES,
 	AMMO_CELLS,
-	AMMO_SLUGS
+	AMMO_SLUGS,
+	AMMO_GIBS     //COME HERE I BORKE SHIT
 } ammo_t;
 
 
@@ -833,6 +834,7 @@ typedef struct
 	int			max_grenades;
 	int			max_cells;
 	int			max_slugs;
+	int			max_gibs; //COME HERE NEW AMMOP TYPE
 
 	gitem_t		*weapon;
 	gitem_t		*lastweapon;
